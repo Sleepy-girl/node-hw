@@ -1,9 +1,7 @@
 const { Router } = require("express");
 const Joi = require('@hapi/joi');
-const uuid = require('uuid');
 
 const Contacts = require('../../contacts');
-const { version } = require("yargs");
 
 const contactsRouter = Router();
 
@@ -47,7 +45,7 @@ function createContact(req, res, next) {
     res.status(201).json(contacts);
     return;
   }
-  res.status(400).json('missing required name field');
+  res.status(400).json({message: 'missing required name field'});
 }
 
 function getlistContacts(req, res, next) {
@@ -62,7 +60,7 @@ function getContact(req, res, next) {
     res.json(contact);
     return;
   }
-  res.status(404).json('Not found');
+  res.status(404).json({message: 'Not found'});
 }
 
 function validateUpdateContact(req, res, next) {
@@ -87,7 +85,7 @@ function updateContact(req, res, next) {
     res.status(200).send(updateContact);
     return;
   };
-  res.status(404).json('Not found')
+  res.status(404).json({message: 'Not found'})
 }
 
 function deleteContact(req, res, next) {
@@ -97,10 +95,10 @@ function deleteContact(req, res, next) {
   // console.log(id)
   if (id) {
     Contacts.removeContact(+contactId);
-    res.status(200).json("contact deleted");
+    res.status(200).json({message: "contact deleted"});
     return;
   }
-  res.status(404).json("Not found");
+  res.status(404).json({message: "Not found"});
 }
 
 
