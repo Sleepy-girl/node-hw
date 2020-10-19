@@ -1,24 +1,30 @@
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 dotenv.config();
 const PORT = process.env.PORT || 3000;
-
-const express = require("express");
-const contactsRouter = require("./api/contacts/router.js");
+const cors = require('cors');
+const morgan = require('morgan');
+const express = require('express');
+const contactsRouter = require('./api/contacts/router');
 
 const app = express();
 
-app.use((request, response, next) => {
-  response.setHeader("Access-Control-Allow-Origin", "*");
-  response.setHeader("Access-Control-Allow-Header", "*");
-  response.setHeader("Access-Control-Allow-Method", "*");
-  next();
-});
+app.use(cors({ origin: 'http://localhost:3000/' }));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json());
-app.use("/contacts", contactsRouter);
+app.use('/api/contacts', contactsRouter);
 
 app.use((err, req, res, next) => {
-  return res.status(err.status).send(err.message);
+  const statusCode = err.statusCode || 500;
+  const status = err.status || 'error';
+  res.status(statusCode).send({ status, message: err.message });
 });
 
-app.listen(PORT, () => console.log(`Server started on ${PORT}`));
+app.listen(PORT, err => {
+  if (err) {
+    return console.log('something went wrong');
+  }
+  console.log(`Server started on ${PORT}`);
+});
