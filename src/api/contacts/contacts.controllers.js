@@ -10,8 +10,8 @@ const getContactsController = catchAsync(async (req, res, next) => {
 const getContactByIdController = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await ContactDB.getContactById(contactId);
-  console.log(contact);
-  res.json(contacts);
+  // console.log(contact);
+  res.json(contact);
 });
 
 const createContactsController = catchAsync(async (req, res, next) => {

@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
 const contactsRouter = require("./api/contacts/contacts.router");
+const mongoose = require("mongoose");
 
 class ContactsServer {
   constructor() {
@@ -12,11 +13,22 @@ class ContactsServer {
   }
 
   start() {
+    this.initDB();
     this.initServer();
     this.initMiddlewares();
     this.initRouters();
     this.initErrorHandling();
     this.startListening();
+  }
+
+  async initDB() {
+    try {
+      await mongoose.connect(process.env.DB_URI, { useUnifiedTopology: true });
+      console.log("Database connection successful");
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
   }
 
   initServer() {
