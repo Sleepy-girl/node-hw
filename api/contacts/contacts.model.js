@@ -1,29 +1,26 @@
-// const { v4: uuidv4 } = require("uuid");
-const fs = require('fs').promises;
-const path = require('path');
-// const contactsPath = require("./db/contacts.json");
-// console.log(contactsPath);
+const fs = require("fs").promises;
+const path = require("path");
 
 class Contacts {
   constructor() {
-    this.contactsPath = path.resolve(__dirname, 'db', 'contacts.json');
+    this.contactsPath = path.resolve(__dirname, "db", "contacts.json");
   }
 
   listContacts = async () => {
     const contactsData = await fs.readFile(this.contactsPath, {
-      encoding: 'utf-8',
+      encoding: "utf-8",
     });
     return JSON.parse(contactsData);
   };
 
-  getContactById = async contactId => {
+  getContactById = async (contactId) => {
     const contactsData = await this.listContacts();
-    return contactsData.find(contact => contact.id === contactId);
+    return contactsData.find((contact) => contact.id === contactId);
   };
 
-  removeContact = async contactId => {
+  removeContact = async (contactId) => {
     const contactsData = await this.listContacts();
-    const result = contactsData.filter(contact => contact.id !== contactId);
+    const result = contactsData.filter((contact) => contact.id !== contactId);
     await fs.writeFile(this.contactsPath, JSON.stringify(result));
     return this.listContacts();
   };
@@ -45,7 +42,7 @@ class Contacts {
   updateContact = async (contactId, contactParams) => {
     const contacts = await this.listContacts();
     const contactIndex = contacts.findIndex(
-      contact => contact.id === contactId,
+      (contact) => contact.id === contactId
     );
     if (contactIndex === -1) {
       return;
