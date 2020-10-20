@@ -1,5 +1,5 @@
-const Contacts = require('../../contacts');
-const catchAsync = require('../../utils/catchAsync');
+const Contacts = require("../../contacts");
+const catchAsync = require("../../utils/catchAsync");
 
 exports.createContact = catchAsync(async (req, res, next) => {
   const { name, email, phone } = req.body;
@@ -9,7 +9,6 @@ exports.createContact = catchAsync(async (req, res, next) => {
 
 exports.getlistContacts = catchAsync(async (req, res, next) => {
   const contacts = await Contacts.listContacts();
-  // console.log(contacts);
   res.json(contacts);
 });
 
@@ -19,7 +18,7 @@ exports.getContact = catchAsync(async (req, res, next) => {
   if (contact) {
     return res.json(contact);
   }
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json({ message: "Not found" });
 });
 
 exports.updateContact = catchAsync(async (req, res, next) => {
@@ -30,7 +29,7 @@ exports.updateContact = catchAsync(async (req, res, next) => {
     res.status(200).send(updateContact);
     return;
   }
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json({ message: "Not found" });
 });
 
 exports.deleteContact = catchAsync(async (req, res, next) => {
@@ -38,8 +37,8 @@ exports.deleteContact = catchAsync(async (req, res, next) => {
   const contact = await Contacts.getContactById(+contactId);
   if (contact) {
     await Contacts.removeContact(+contactId);
-    res.status(200).json({ message: 'contact deleted' });
+    res.status(200).json({ message: "contact deleted" });
     return;
   }
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json({ message: "Not found" });
 });
