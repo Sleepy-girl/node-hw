@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      name: 'NoName',
+      name: "NoName",
     },
     email: {
       type: String,
@@ -30,19 +30,22 @@ const contactSchema = new mongoose.Schema(
       unique: true,
     },
   },
-  { versionKey: false },
+  { versionKey: false }
 );
 
 class Contact {
   constructor() {
-    this.db = mongoose.model('Contacts', contactSchema);
+    this.db = mongoose.model("Contacts", contactSchema);
   }
 
-  getContacts = async query => {
+  getContacts = async (query) => {
     return await this.db.find(query);
   };
+  getContactById = async (contactId) => {
+    return await this.db.findById(contactId);
+  };
 
-  createContact = async contactData => {
+  createContact = async (contactData) => {
     return await this.db.create(contactData);
   };
 
@@ -52,7 +55,7 @@ class Contact {
     });
   };
 
-  deleteContact = async contactId => {
+  deleteContact = async (contactId) => {
     return await this.db.findByIdAndRemove(contactId);
   };
 }
