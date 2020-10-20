@@ -10,8 +10,10 @@ const getContactsController = catchAsync(async (req, res, next) => {
 const getContactByIdController = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await ContactDB.getContactById(contactId);
-  // console.log(contact);
-  res.json(contact);
+  if (contact) {
+    return res.json(contact);
+  }
+  res.status(404).json({ message: "Not found" });
 });
 
 const createContactsController = catchAsync(async (req, res, next) => {
@@ -22,15 +24,22 @@ const createContactsController = catchAsync(async (req, res, next) => {
 
 const updateContactsController = catchAsync(async (req, res, next) => {
   const { id, ...data } = req.body;
-  const updatedContact = await ContactDB.updateContact(id, data);
-  res.json(updatedContact);
+  const contact = await ContactDB.getContactById(id);
+  if (contact && req.body) {
+    const updatedContact = await ContactDB.updateContact(id, data);
+    return res.send(updatedContact);
+  }
+  res.status(404).json({ message: "Not found" });
 });
 
 const deleteContactsController = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await ContactDB.getContacts();
-  await ContactDB.deleteContact(contactId);
-  res.end();
+  const contact = await ContactDB.getContactById(contactId);
+  if (contact) {
+    await ContactDB.deleteContact(contactId);
+    return res.json({ message: "contact deleted" });
+  }
+  res.status(404).json({ message: "Not found" });
 });
 
 module.exports = {
