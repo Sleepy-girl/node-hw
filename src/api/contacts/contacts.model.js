@@ -3,7 +3,7 @@ const path = require("path");
 
 class Contacts {
   constructor() {
-    this.contactsPath = path.resolve(__dirname, "db", "contacts.json");
+    this.contactsPath = path.resolve(__dirname, "../../db", "contacts.json");
   }
 
   listContacts = async () => {

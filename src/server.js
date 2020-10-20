@@ -56,5 +56,6 @@ class ContactsServer {
   }
 }
 
-exports.ContactsServer = ContactsServer;
-exports.contactsServer = new ContactsServer();
+// exports.ContactsServer = ContactsServer;
+// exports.contactsServer = new ContactsServer();
+module.exports = new ContactsServer();
