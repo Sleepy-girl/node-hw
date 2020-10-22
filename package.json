@@ -19,11 +19,13 @@
   "homepage": "https://github.com/Sleepy-girl/node-hw-02#readme",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
     "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.9",
     "morgan": "^1.10.0",
     "path": "^0.12.7",

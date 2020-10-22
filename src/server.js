@@ -4,6 +4,9 @@ const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
+
+const authRouter = require("./api/auth/auth.router");
+const usersRouter = require("./api/users/users.router");
 const contactsRouter = require("./api/contacts/contacts.router");
 const mongoose = require("mongoose");
 
@@ -42,6 +45,8 @@ class ContactsServer {
   }
 
   initRouters() {
+    this.server.use("/auth", authRouter);
+    this.server.use("/api/users", usersRouter);
     this.server.use("/api/contacts", contactsRouter);
     this.server.use((req, res) =>
       res
