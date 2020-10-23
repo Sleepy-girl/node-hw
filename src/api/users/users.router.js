@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const {
   getUsersController,
-  // getUserByIdController,
-  // createUsersController,
-  // updateUsersController,
-  // deleteUsersController,
+  getCurrentUserController,
+  getUserByIdController,
+  updateUsersController,
+  deleteUsersController,
 } = require("./users.controllers");
 const usersRouter = Router();
 
@@ -12,11 +12,12 @@ const {
   checkAuthTokenMiddleWare,
 } = require("../../middlewares/auth.middleware");
 
-// usersRouter.post("/", createUsersController);
-
 usersRouter.get("/", checkAuthTokenMiddleWare, getUsersController);
-// usersRouter.get("/:userId", getUserByIdController);
-// usersRouter.patch("/", updateUsersController);
-// usersRouter.delete("/:userId", deleteUsersController);
+
+usersRouter.get("/current", checkAuthTokenMiddleWare, getCurrentUserController);
+
+usersRouter.get("/:userId", checkAuthTokenMiddleWare, getUserByIdController);
+usersRouter.patch("/", checkAuthTokenMiddleWare, updateUsersController);
+usersRouter.delete("/:userId", checkAuthTokenMiddleWare, deleteUsersController);
 
 module.exports = usersRouter;

@@ -4,13 +4,14 @@ const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
+const cookieParser = require("cookie-parser");
 
 const authRouter = require("./api/auth/auth.router");
 const usersRouter = require("./api/users/users.router");
 const contactsRouter = require("./api/contacts/contacts.router");
 const mongoose = require("mongoose");
 
-class ContactsServer {
+class RunServer {
   constructor() {
     this.server = null;
   }
@@ -42,6 +43,7 @@ class ContactsServer {
     this.server.use(express.json());
     this.server.use(morgan("combined"));
     this.server.use(cors({ origin: "http://localhost:3000" }));
+    this.server.use(cookieParser());
   }
 
   initRouters() {
@@ -73,5 +75,5 @@ class ContactsServer {
   }
 }
 
-exports.ContactsServer = ContactsServer;
-exports.contactsServer = new ContactsServer();
+exports.RunServer = RunServer;
+exports.runServer = new RunServer();

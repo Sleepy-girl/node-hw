@@ -4,11 +4,6 @@ const userSchema = new mongoose.Schema(
   {
     email: String,
     password: String,
-    role: {
-      type: String,
-      required: true,
-      default: "USER",
-    },
     subscription: {
       type: String,
       enum: ["free", "pro", "premium"],
@@ -30,6 +25,17 @@ class User {
 
   findUser = async (query) => {
     return await this.db.findOne(query);
+  };
+  findEmailOfUsers = async (email) => {
+    return await this.db.findOne({ email });
+  };
+
+  findUserById = async (userId) => {
+    return await this.db.findById(userId);
+  };
+
+  existUser = async (email) => {
+    return (await this.findEmailOfUsers(email)) ? true : false;
   };
 
   createUser = async (userData) => {

@@ -1,4 +1,5 @@
 const { verifyToken } = require("../services/token.service");
+const User = require("../api/users/users.model");
 
 const checkAuthTokenMiddleWare = async (req, res, next) => {
   try {
@@ -8,10 +9,17 @@ const checkAuthTokenMiddleWare = async (req, res, next) => {
     }
     const data = await verifyToken(token);
     req.userId = data.id;
+    const userInfo = await User.findUserById(data.id);
+    req.userInfo = {
+      email: userInfo.email,
+      id: userInfo._id,
+    };
     next();
   } catch (error) {
-    res.status(401).send("Invalid Token");
+    res.status(401).send({ message: "Not authorized" });
   }
 };
 
-module.exports = { checkAuthTokenMiddleWare };
+module.exports = {
+  checkAuthTokenMiddleWare,
+};

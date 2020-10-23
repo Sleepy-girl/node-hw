@@ -1,2 +1,2 @@
-const { contactsServer } = require("./src/server");
-contactsServer.start();
+const { runServer } = require("./src/server");
+runServer.start();
