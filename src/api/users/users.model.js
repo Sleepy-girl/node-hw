@@ -35,7 +35,7 @@ class User {
   };
 
   existUser = async (email) => {
-    return (await this.findEmailOfUsers(email)) ? true : false;
+    return await this.findEmailOfUsers(email);
   };
 
   createUser = async (userData) => {
