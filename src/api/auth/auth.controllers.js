@@ -60,6 +60,7 @@ const logoutController = catchAsync(async (req, res, next) => {
   const user = await User.findUserById(id);
   if (user) {
     const { token } = req.cookies;
+    await User.updateUser(user._id, { token: null });
     res.cookie("authcookie", null, { maxAge: 900000, httpOnly: true });
     return res.sendStatus(204);
   }
