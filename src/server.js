@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT || 3000;
+const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
@@ -8,6 +9,7 @@ const cookieParser = require("cookie-parser");
 
 const authRouter = require("./api/auth/auth.router");
 const mongoose = require("mongoose");
+// const { patch } = require("./api/routers");
 
 class RunServer {
   constructor() {
@@ -38,6 +40,8 @@ class RunServer {
   }
 
   initMiddlewares() {
+    this.server.use("/", express.static(path.resolve(__dirname, "public")));
+
     this.server.use(express.json());
     this.server.use(morgan("combined"));
     this.server.use(cors({ origin: "http://localhost:3000" }));
