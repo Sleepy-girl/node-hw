@@ -8,15 +8,12 @@ const getUsersController = catchAsync(async (req, res, next) => {
 });
 
 const getCurrentUserController = catchAsync(async (req, res, next) => {
-  const { id: userId } = req.userInfo;
+  const { id: userId } = req.user;
   const currentUser = await UserDB.findUserById(userId);
-  if (currentUser) {
-    return res.json({
-      email: currentUser.email,
-      subscription: currentUser.subscription,
-    });
-  }
-  res.status(401).send({ message: "Not authorized" });
+  return res.json({
+    email: currentUser.email,
+    subscription: currentUser.subscription,
+  });
 });
 
 const getUserByIdController = catchAsync(async (req, res, next) => {

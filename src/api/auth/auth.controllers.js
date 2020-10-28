@@ -1,11 +1,11 @@
 const User = require("../users/users.model");
 const catchAsync = require("../../utils/catchAsync");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const {
   createVarificationToken,
-  verifyToken,
+  // verifyToken,
 } = require("../../services/token.service");
-const tokenService = require("../../services/token.service");
+// const tokenService = require("../../services/token.service");
 
 const registrationController = catchAsync(async (req, res, next) => {
   const { body } = req;
@@ -32,20 +32,17 @@ const loginController = catchAsync(async (req, res, next) => {
 
   const user = await User.findUser({ email });
   if (!user) {
-    return res
-      .status(404)
-      .send({ message: `User with email ${email} not found` });
+    return res.status(401).send({ message: `Unauthorized` });
   }
 
   const isPasswordEqual = await bcrypt.compare(password, user.password);
   if (!isPasswordEqual) {
-    return res.status(404).send({ message: `Wrong password` });
+    return res.status(401).send({ message: `Unauthorized` });
   }
 
   const token = await createVarificationToken({ id: user._id });
 
-  res.cookie("authcookie", token, { maxAge: 900000, httpOnly: true });
-
+  res.cookie("token", token, { maxAge: 900000, httpOnly: true });
   return res.json({
     token,
     user: {
@@ -56,13 +53,8 @@ const loginController = catchAsync(async (req, res, next) => {
 });
 
 const logoutController = catchAsync(async (req, res, next) => {
-  const id = req.userId;
-  const user = await User.findUserById(id);
-  if (user) {
-    res.cookie("authcookie", null, { maxAge: 900000, httpOnly: true });
-    return res.sendStatus(204);
-  }
-  res.status(401).send({ message: "Not authorized" });
+  res.cookie("token", null, { maxAge: 900000, httpOnly: true });
+  return res.sendStatus(204);
 });
 
 module.exports = {

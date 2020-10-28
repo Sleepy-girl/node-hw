@@ -7,8 +7,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 
 const authRouter = require("./api/auth/auth.router");
-const usersRouter = require("./api/users/users.router");
-const contactsRouter = require("./api/contacts/contacts.router");
 const mongoose = require("mongoose");
 
 class RunServer {
@@ -48,8 +46,7 @@ class RunServer {
 
   initRouters() {
     this.server.use("/auth", authRouter);
-    this.server.use("/api/users", usersRouter);
-    this.server.use("/api/contacts", contactsRouter);
+    this.server.use("/api", require("./api/routers"));
     this.server.use((req, res) =>
       res
         .status(404)
