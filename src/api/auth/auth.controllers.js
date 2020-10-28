@@ -53,7 +53,7 @@ const loginController = catchAsync(async (req, res, next) => {
 });
 
 const logoutController = catchAsync(async (req, res, next) => {
-  res.cookie("token", null, { maxAge: 900000, httpOnly: true });
+  res.cookie("token", null, { maxAge: 0, httpOnly: true });
   return res.sendStatus(204);
 });
 
