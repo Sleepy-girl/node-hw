@@ -9,7 +9,7 @@ const {
 
 const registrationController = catchAsync(async (req, res, next) => {
   const { body } = req;
-  if (await User.existUser(body.email)) {
+  if (await User.isExistUser(body.email)) {
     return res.status(409).json({
       message: `Email ${body.email} in use`,
     });

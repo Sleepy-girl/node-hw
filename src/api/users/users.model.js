@@ -34,7 +34,7 @@ class User {
     return await this.db.findById(userId);
   };
 
-  existUser = async (email) => {
+  isExistUser = async (email) => {
     return await this.findEmailOfUsers(email);
   };
 
