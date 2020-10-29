@@ -6,7 +6,11 @@ const avatarUploader = () => {
       cb(null, "src/public/images");
     },
     filename: function (req, file, cb) {
-      cb(null, `${req.user.id}.jpg`);
+      const fileType = file.mimetype.split("/")[1];
+      if (fileType !== "png" && fileType !== "jpeg" && fileType !== "jpg") {
+        return cb(new Error("File must be picture"));
+      }
+      cb(null, `${req.user.id}.${fileType}`);
     },
   });
   return multer({ storage }).single("avatar");

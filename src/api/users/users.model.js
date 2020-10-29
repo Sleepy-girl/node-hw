@@ -6,8 +6,7 @@ const userSchema = new mongoose.Schema(
     password: String,
     avatarURL: {
       type: String,
-      default:
-        "https://www.ezyschooling.com/_nuxt/img/default-avatar.87476f1.png",
+      default: "",
     },
     subscription: {
       type: String,
