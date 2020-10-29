@@ -1,5 +1,5 @@
 {
-  "name": "node-hw",
+  "name": "node-hw-02",
   "version": "0.0.1",
   "description": "rest api",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sleepy-girl/node-hw.git"
+    "url": "git+https://github.com/Sleepy-girl/node-hw-02.git"
   },
   "author": "Vygovska",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Sleepy-girl/node-hw/issues"
+    "url": "https://github.com/Sleepy-girl/node-hw-02/issues"
   },
-  "homepage": "https://github.com/Sleepy-girl/node-hw#readme",
+  "homepage": "https://github.com/Sleepy-girl/node-hw-02#readme",
   "dependencies": {
     "@google-cloud/storage": "^5.4.0",
     "avatar-generator": "^2.0.4",
