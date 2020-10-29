@@ -46,6 +46,7 @@ class Contact {
       .skip(skipContacts)
       .limit(+limit);
   };
+
   getContactById = async (contactId) => {
     return await this.db.findById(contactId);
   };
