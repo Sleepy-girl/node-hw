@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/Sleepy-girl/node-hw-02#readme",
   "dependencies": {
+    "@google-cloud/storage": "^5.4.0",
     "avatar-generator": "^2.0.4",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

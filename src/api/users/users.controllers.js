@@ -1,5 +1,6 @@
 const UserDB = require("./users.model");
 const catchAsync = require("../../utils/catchAsync");
+const { uploadAvatarToStorage } = require("../../services/gcp.service");
 
 const getUsersController = catchAsync(async (req, res, next) => {
   const { query } = req;
@@ -13,6 +14,7 @@ const getCurrentUserController = catchAsync(async (req, res, next) => {
   return res.json({
     email: currentUser.email,
     subscription: currentUser.subscription,
+    avatarURL: currentUser.avatarURL,
   });
 });
 
@@ -38,9 +40,10 @@ const updateUsersController = catchAsync(async (req, res, next) => {
 const uploadAvatarController = catchAsync(async (req, res, next) => {
   const file = req.file;
   const id = req.user.id;
-  await UserDB.updateUser(id, { avatarURL: file.path });
+  const publicUrl = await uploadAvatarToStorage(file.path);
+  await UserDB.updateUser(id, { avatarURL: publicUrl });
   res.json({
-    avatarURL: `http://localhost:3000/images/${file.filename}`,
+    avatarURL: publicUrl,
   });
 });
 
