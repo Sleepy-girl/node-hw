@@ -35,6 +35,15 @@ const updateUsersController = catchAsync(async (req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
+const uploadAvatarController = catchAsync(async (req, res, next) => {
+  const file = req.file;
+  const id = req.user.id;
+  await UserDB.updateUser(id, { avatarURL: file.path });
+  res.json({
+    avatarURL: `http://localhost:3000/images/${file.filename}`,
+  });
+});
+
 const deleteUsersController = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
   const user = await UserDB.getUserById(userId);
@@ -50,5 +59,6 @@ module.exports = {
   getUserByIdController,
   getCurrentUserController,
   updateUsersController,
+  uploadAvatarController,
   deleteUsersController,
 };

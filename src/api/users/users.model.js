@@ -4,7 +4,11 @@ const userSchema = new mongoose.Schema(
   {
     email: String,
     password: String,
-    avatarURL: String,
+    avatarURL: {
+      type: String,
+      default:
+        "https://www.ezyschooling.com/_nuxt/img/default-avatar.87476f1.png",
+    },
     subscription: {
       type: String,
       enum: ["free", "pro", "premium"],
