@@ -39,7 +39,12 @@ class Contact {
   }
 
   getContacts = async (query) => {
-    return await this.db.find(query);
+    const { limit, page, ...otherQuery } = query;
+    const skipContacts = (page - 1) * limit;
+    return await this.db
+      .find(otherQuery)
+      .skip(skipContacts)
+      .limit(+limit);
   };
   getContactById = async (contactId) => {
     return await this.db.findById(contactId);
