@@ -6,7 +6,7 @@ const StorageGCP = Promise.promisifyAll(Storage);
 
 const storage = new StorageGCP({
   projectId: process.env.PROJECT_ID,
-  keyFilename: "keys/gcp-key.json",
+  // keyFilename: "keys/gcp-key.json",
 });
 
 const avatarsBucket = storage.bucket("nodejs-hw");
