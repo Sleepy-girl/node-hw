@@ -1,5 +1,6 @@
 const UserDB = require("./users.model");
 const catchAsync = require("../../utils/catchAsync");
+const { uploadAvatarToStorage } = require("../../services/gcp.service");
 
 const getUsersController = catchAsync(async (req, res, next) => {
   const { query } = req;
@@ -13,6 +14,7 @@ const getCurrentUserController = catchAsync(async (req, res, next) => {
   return res.json({
     email: currentUser.email,
     subscription: currentUser.subscription,
+    avatarURL: currentUser.avatarURL,
   });
 });
 
@@ -35,6 +37,16 @@ const updateUsersController = catchAsync(async (req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
+const uploadAvatarController = catchAsync(async (req, res, next) => {
+  const file = req.file;
+  const id = req.user.id;
+  const publicUrl = await uploadAvatarToStorage(file.path);
+  await UserDB.updateUser(id, { avatarURL: publicUrl });
+  res.json({
+    avatarURL: publicUrl,
+  });
+});
+
 const deleteUsersController = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
   const user = await UserDB.getUserById(userId);
@@ -50,5 +62,6 @@ module.exports = {
   getUserByIdController,
   getCurrentUserController,
   updateUsersController,
+  uploadAvatarController,
   deleteUsersController,
 };

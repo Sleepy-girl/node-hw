@@ -4,7 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     email: String,
     password: String,
-    avatarURL: String,
+    avatarURL: {
+      type: String,
+      default: "",
+    },
     subscription: {
       type: String,
       enum: ["free", "pro", "premium"],

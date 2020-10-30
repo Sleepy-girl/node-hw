@@ -5,6 +5,8 @@ const {
   createVarificationToken,
   // verifyToken,
 } = require("../../services/token.service");
+const AvatarGenerator = require("avatar-generator");
+const path = require("path");
 // const tokenService = require("../../services/token.service");
 
 const registrationController = catchAsync(async (req, res, next) => {
@@ -19,9 +21,28 @@ const registrationController = catchAsync(async (req, res, next) => {
     body.password,
     Number(process.env.SALT)
   );
-  const newUser = await User.createUser({ ...body, password: hashedPassword });
+
+  const newUser = await User.createUser({
+    ...body,
+    password: hashedPassword,
+  });
+
+  const avatar = new AvatarGenerator({
+    parts: ["background", "face", "clothes", "head", "hair", "eye", "mouth"],
+    partsLocation: path.join(__dirname, "../../utils/avatarCreator/img"),
+    imageExtension: ".png",
+  });
+  const variant = "female";
+  const image = avatar.generate("email@example.com", variant).then((res) => {
+    console.log(res.png().toFile(`tmp/${body.email}.png`));
+  });
+
   res.status(201).json({
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      // avatarURL: newUser.avatarURL,
+    },
   });
 });
 
@@ -48,6 +69,7 @@ const loginController = catchAsync(async (req, res, next) => {
     user: {
       email: user.email,
       subscription: user.subscription,
+      avatarURL: user.avatarURL,
     },
   });
 });
