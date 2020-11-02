@@ -3,7 +3,7 @@ const multer = require("multer");
 const avatarUploader = () => {
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "src/public/images");
+      cb(null, "tmp");
     },
     filename: function (req, file, cb) {
       const fileType = file.mimetype.split("/")[1];
@@ -13,6 +13,7 @@ const avatarUploader = () => {
       cb(null, `${req.user.id}.${fileType}`);
     },
   });
+
   return multer({ storage }).single("avatar");
 };
 

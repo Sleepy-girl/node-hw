@@ -1,6 +1,9 @@
 const UserDB = require("./users.model");
 const catchAsync = require("../../utils/catchAsync");
-const { uploadAvatarToStorage } = require("../../services/gcp.service");
+// const { uploadAvatarToStorage } = require("../../services/gcp.service");
+const fs = require("fs").promises;
+const { handleAvatar } = require("../../utils/avatarGenerator");
+const http = require("https");
 
 const getUsersController = catchAsync(async (req, res, next) => {
   const { query } = req;
@@ -40,11 +43,17 @@ const updateUsersController = catchAsync(async (req, res, next) => {
 const uploadAvatarController = catchAsync(async (req, res, next) => {
   const file = req.file;
   const id = req.user.id;
-  const publicUrl = await uploadAvatarToStorage(file.path);
-  await UserDB.updateUser(id, { avatarURL: publicUrl });
-  res.json({
-    avatarURL: publicUrl,
-  });
+  // const fileName = file.filename;
+  console.log("filename", file.filename);
+
+  // await handleAvatar(file.filename);
+
+  const avatarURL = `http://localhost:${process.env.PORT}/images/${file.filename}`;
+
+  await fs.rename(`tmp/${file.filename}`, `src/public/images/${file.filename}`);
+
+  await UserDB.updateUser(id, { avatarURL });
+  res.json({ avatarURL });
 });
 
 const deleteUsersController = catchAsync(async (req, res, next) => {

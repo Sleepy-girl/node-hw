@@ -27,7 +27,13 @@ class RunServer {
 
   async initDB() {
     try {
-      await mongoose.connect(process.env.DB_URI, { useUnifiedTopology: true });
+      mongoose.set("debug", true);
+      await mongoose.connect(process.env.DB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: true,
+        useCreateIndex: true,
+      });
       console.log("Database connection successful");
     } catch (error) {
       console.log(error);
@@ -40,8 +46,6 @@ class RunServer {
   }
 
   initMiddlewares() {
-    this.server.use("/", express.static(path.resolve(__dirname, "public")));
-
     this.server.use(express.json());
     this.server.use(morgan("combined"));
     this.server.use(cors({ origin: "http://localhost:3000" }));
@@ -51,6 +55,7 @@ class RunServer {
   initRouters() {
     this.server.use("/auth", authRouter);
     this.server.use("/api", require("./api/routers"));
+    this.server.use("/", express.static(path.resolve(__dirname, "public")));
     this.server.use((req, res) =>
       res
         .status(404)

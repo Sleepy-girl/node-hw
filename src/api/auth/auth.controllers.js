@@ -5,9 +5,11 @@ const {
   createVarificationToken,
   // verifyToken,
 } = require("../../services/token.service");
-const AvatarGenerator = require("avatar-generator");
+// const AvatarGenerator = require("avatar-generator");
 const path = require("path");
 // const tokenService = require("../../services/token.service");
+
+const { generateAvatar, handleAvatar } = require("../../utils/avatarGenerator");
 
 const registrationController = catchAsync(async (req, res, next) => {
   const { body } = req;
@@ -27,21 +29,19 @@ const registrationController = catchAsync(async (req, res, next) => {
     password: hashedPassword,
   });
 
-  const avatar = new AvatarGenerator({
-    parts: ["background", "face", "clothes", "head", "hair", "eye", "mouth"],
-    partsLocation: path.join(__dirname, "../../utils/avatarCreator/img"),
-    imageExtension: ".png",
-  });
-  const variant = "female";
-  const image = avatar.generate("email@example.com", variant).then((res) => {
-    console.log(res.png().toFile(`tmp/${body.email}.png`));
+  const randomAvatar = await generateAvatar(newUser._id);
+  await handleAvatar(randomAvatar);
+  const avatarURL_ = `http://localhost:${process.env.PORT}/images/${randomAvatar}`;
+
+  const updatedUser = await User.updateUser(newUser._id, {
+    avatarURL: avatarURL_,
   });
 
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
-      // avatarURL: newUser.avatarURL,
+      avatarURL: updatedUser.avatarURL,
     },
   });
 });
