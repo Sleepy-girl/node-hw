@@ -9,7 +9,6 @@ const cookieParser = require("cookie-parser");
 
 const authRouter = require("./api/auth/auth.router");
 const mongoose = require("mongoose");
-// const { patch } = require("./api/routers");
 
 class RunServer {
   constructor() {

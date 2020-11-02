@@ -1,13 +1,8 @@
 const User = require("../users/users.model");
 const catchAsync = require("../../utils/catchAsync");
 const bcrypt = require("bcryptjs");
-const {
-  createVarificationToken,
-  // verifyToken,
-} = require("../../services/token.service");
-// const AvatarGenerator = require("avatar-generator");
+const { createVarificationToken } = require("../../services/token.service");
 const path = require("path");
-// const tokenService = require("../../services/token.service");
 
 const { generateAvatar, handleAvatar } = require("../../utils/avatarGenerator");
 

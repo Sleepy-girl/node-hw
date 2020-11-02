@@ -1,6 +1,5 @@
 const UserDB = require("./users.model");
 const catchAsync = require("../../utils/catchAsync");
-// const { uploadAvatarToStorage } = require("../../services/gcp.service");
 const fs = require("fs").promises;
 const { handleAvatar } = require("../../utils/avatarGenerator");
 const http = require("https");
@@ -43,15 +42,8 @@ const updateUsersController = catchAsync(async (req, res, next) => {
 const uploadAvatarController = catchAsync(async (req, res, next) => {
   const file = req.file;
   const id = req.user.id;
-  // const fileName = file.filename;
-  console.log("filename", file.filename);
-
-  // await handleAvatar(file.filename);
-
   const avatarURL = `http://localhost:${process.env.PORT}/images/${file.filename}`;
-
   await fs.rename(`tmp/${file.filename}`, `src/public/images/${file.filename}`);
-
   await UserDB.updateUser(id, { avatarURL });
   res.json({ avatarURL });
 });
