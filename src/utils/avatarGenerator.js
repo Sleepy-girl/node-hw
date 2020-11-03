@@ -33,7 +33,7 @@ const handleAvatar = async (avatar) => {
       );
       await imageCompress.quality(60);
     }
-    await fsPromises.rename(`tmp/${avatar}`, `src/public/images/${avatar}`);
+    await fsPromises.rename(`tmp/${avatar}`, `public/images/${avatar}`);
   } catch (error) {
     console.log(error);
   }
