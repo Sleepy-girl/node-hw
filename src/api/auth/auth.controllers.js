@@ -1,7 +1,11 @@
 const User = require("../users/users.model");
 const catchAsync = require("../../utils/catchAsync");
 const bcrypt = require("bcryptjs");
-const { createVarificationToken } = require("../../services/token.service");
+const {
+  createVarificationToken,
+  checkEmailToken,
+} = require("../../services/token.service");
+const { verifyEmail } = require("../../services/mail.service");
 const path = require("path");
 
 const { generateAvatar, handleAvatar } = require("../../utils/avatarGenerator");
@@ -23,7 +27,6 @@ const registrationController = catchAsync(async (req, res, next) => {
     ...body,
     password: hashedPassword,
   });
-
   const randomAvatar = await generateAvatar(newUser._id);
   await handleAvatar(randomAvatar);
   const avatarURL_ = `http://localhost:${process.env.PORT}/images/${randomAvatar}`;
@@ -32,11 +35,13 @@ const registrationController = catchAsync(async (req, res, next) => {
     avatarURL: avatarURL_,
   });
 
+  await verifyEmail(body.email);
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
       avatarURL: updatedUser.avatarURL,
+      isActive: newUser.isActive,
     },
   });
 });
@@ -49,6 +54,10 @@ const loginController = catchAsync(async (req, res, next) => {
   const user = await User.findUser({ email });
   if (!user) {
     return res.status(401).send({ message: `Unauthorized` });
+  }
+
+  if (!user.isActive) {
+    return res.status(404).send({ message: `User not found` });
   }
 
   const isPasswordEqual = await bcrypt.compare(password, user.password);
@@ -69,6 +78,21 @@ const loginController = catchAsync(async (req, res, next) => {
   });
 });
 
+const verifyController = catchAsync(async (req, res, next) => {
+  const { token } = req.params;
+  const { email } = await checkEmailToken(token);
+
+  const user = await User.findUser({ email });
+
+  if (!user) {
+    return res.status(401).send({ message: `Unauthorized` });
+  }
+
+  await User.updateUser(user._id, { isActive: true });
+
+  return res.redirect(`http://localhost:${process.env.PORT}`);
+});
+
 const logoutController = catchAsync(async (req, res, next) => {
   res.cookie("token", null, { maxAge: 0, httpOnly: true });
   return res.sendStatus(204);
@@ -77,5 +101,6 @@ const logoutController = catchAsync(async (req, res, next) => {
 module.exports = {
   registrationController,
   loginController,
+  verifyController,
   logoutController,
 };

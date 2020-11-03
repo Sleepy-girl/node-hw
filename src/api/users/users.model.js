@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema(
       enum: ["free", "pro", "premium"],
       default: "free",
     },
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { versionKey: false }
 );

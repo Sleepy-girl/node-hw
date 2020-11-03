@@ -47,14 +47,14 @@ class RunServer {
   initMiddlewares() {
     this.server.use(express.json());
     this.server.use(morgan("combined"));
-    this.server.use(cors({ origin: "http://localhost:3000" }));
+    this.server.use(cors({ origin: `http://localhost:${PORT}` }));
     this.server.use(cookieParser());
   }
 
   initRouters() {
     this.server.use("/auth", authRouter);
     this.server.use("/api", require("./api/routers"));
-    this.server.use("/", express.static(path.resolve(__dirname, "public")));
+    this.server.use("/", express.static(path.resolve(__dirname, "../public")));
     this.server.use((req, res) =>
       res
         .status(404)
