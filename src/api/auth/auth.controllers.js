@@ -81,19 +81,14 @@ const loginController = catchAsync(async (req, res, next) => {
 const verifyController = catchAsync(async (req, res, next) => {
   const { token } = req.params;
   const { email } = await checkEmailToken(token);
-
   const user = await User.findUser({ email });
-
   if (!user) {
     return res.status(401).send({ message: `Unauthorized` });
   }
-
   if (user.isActive) {
     return res.status(404).send({ message: `Not Found` });
   }
-
   await User.updateUser(user._id, { isActive: true });
-
   return res.redirect(`http://localhost:${process.env.PORT}`);
 });
 
