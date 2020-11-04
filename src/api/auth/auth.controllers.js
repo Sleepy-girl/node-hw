@@ -88,6 +88,10 @@ const verifyController = catchAsync(async (req, res, next) => {
     return res.status(401).send({ message: `Unauthorized` });
   }
 
+  if (user.isActive) {
+    return res.status(404).send({ message: `Not Found` });
+  }
+
   await User.updateUser(user._id, { isActive: true });
 
   return res.redirect(`http://localhost:${process.env.PORT}`);
